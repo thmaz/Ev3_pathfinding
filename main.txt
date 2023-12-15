@@ -1,0 +1,92 @@
+#!/usr/bin/env pybricks-micropython
+from pybricks.hubs import EV3Brick
+from pybricks.ev3devices import (Motor, TouchSensor, ColorSensor,
+                                 InfraredSensor, UltrasonicSensor, GyroSensor)
+from pybricks.parameters import Port, Stop, Direction, Button, Color
+from pybricks.tools import wait, StopWatch, DataLog
+from pybricks.robotics import DriveBase
+from pybricks.media.ev3dev import SoundFile, ImageFile
+from pybricks.media.ev3dev import Font
+
+# Create your objects here.
+ev3 = EV3Brick()    #ev3
+obstacle_sensor = UltrasonicSensor(Port.S4)     #MotionSensor
+line_sensor = ColorSensor(Port.S1)
+touch_sensor = TouchSensor(Port.S2)
+
+# Initialize the motors
+left_motor = Motor(Port.A)
+right_motor = Motor(Port.D)
+robot = DriveBase(left_motor, right_motor, wheel_diameter=55.5, axle_track=104)
+
+#Light threshold color sensor
+BLACK = 9
+WHITE = 85
+threshold = (BLACK + WHITE) / 2
+
+
+#Startup 
+#start_up = robot.drive_time(-220, 0, 25000)
+robot.settings(1000, 1000, 100, 100)
+
+def func1():
+      wait(5)
+      ev3.speaker.say("Obstacle")
+
+def func2():
+      ev3.speaker.say("Place medicine")
+      wait(5)
+      robot.drive_time(-100, 0, 4000) 
+      robot.turn(116)
+      robot.drive_time(-100, 0, 6000)
+      robot.turn(-116)
+      robot.drive_time(-100, 0, 5000)
+      ev3.speaker.say("Ralf at your service")
+      wait(10)
+      robot.turn(220)
+      robot.drive_time(-100, 0, 5000) 
+      robot.turn(116)
+      robot.drive_time(-100, 0, 6000)
+      robot.turn(-116)
+      robot.drive_time(-100, 0, 4000)
+      
+def func3():
+      ev3.speaker.say("Place medicine")
+      wait(5)
+      robot.turn(220)
+      robot.drive_time(-100, 0, 9000)
+      ev3.speaker.say("Ralf at your service")
+      wait(10)
+      robot.turn(220)
+      robot.drive_time(-100, 0, 9000)
+      robot.turn(-220)
+
+def func4():
+      ev3.speaker.say("Place medicine")
+      wait(5)
+      robot.drive_time(-100, 0, 4000) 
+      robot.turn(-116)
+      robot.drive_time(-100, 0, 6000)
+      robot.turn(116)
+      robot.drive_time(-100, 0, 5000)
+      ev3.speaker.say("Ralf at your service")
+      wait(10)
+      robot.turn(220)
+      robot.drive_time(-100, 0, 5000) 
+      robot.turn(-116)
+      robot.drive_time(-100, 0, 6000)
+      robot.turn(116)
+      robot.drive_time(-100, 0, 4000)
+      ev3.speaker.say("Action complete")
+
+if obstacle_sensor.distance() >= 1000:
+      func2()
+      func3()
+      func4()
+      if obstacle_sensor.distance() < 1000:
+            func1()
+   
+ #while touch_sensor.pressed(True):
+ #       robot.stop(stop.BRAKE)
+  #      ev3.speaker.say("Ralf stopped")
+#robot.stop(Stop.BRAKE)
